@@ -11,6 +11,8 @@ Napisać kod testujący moduł fracs. """
 from math import gcd   # Py3
 import unittest
 
+# wersja z dodanym rzucaniem wyjątku przy dzieleniu przez zero
+# i dodatkowymi testami próby wykonania takiego działania
 
 class Frac:
     """Klasa reprezentująca ułamki."""
@@ -93,9 +95,15 @@ class Frac:
         if isinstance(other, Frac):
             return Frac(self.x * other.y, self.y * other.x)
         elif isinstance(other, int):
-            return Frac(self.x, self.y * other)
+            if other == 0:
+                raise ZeroDivisionError("Nie można dzielić przez zero")
+            else:
+                return Frac(self.x, self.y * other)
         elif isinstance(other, float):
-            return self / Frac(*other.as_integer_ratio())
+            if other == 0.0:
+                raise ZeroDivisionError("Nie można dzielić przez zero")
+            else:
+                return self / Frac(*other.as_integer_ratio())
     
     def __rtruediv__(self, other):  # int/frac, float/frac Py3
         if isinstance(other, int):
@@ -161,11 +169,16 @@ class TestFrac(unittest.TestCase):
         self.assertEqual(Frac(7, 5) * Frac(1, 3), Frac(7, 15))
         self.assertEqual(Frac(3, 4) * 4, 3)
         self.assertEqual(2.0 * Frac(3, 4), 1.5)
+        self.assertEqual(0.5 * Frac(1, 2) * 4, 1)
 
     def test_truediv(self):
         self.assertEqual(Frac(7, -3) / Frac(2, 5), Frac(-35, 6))
         self.assertEqual(2 / Frac(2, 3), Frac(3, 1))
         self.assertAlmostEqual(1.5 / Frac(1, 2), 3.0)
+        # assertRaises oczekuje na wywołanie obiektu callable,
+        # dlatego używamy wyrażenia lambda
+        self.assertRaises(ZeroDivisionError, lambda: Frac(2, 3) / 0)
+        self.assertRaises(ZeroDivisionError, lambda: Frac() / 0.0)
 
     def test_pos(self):
         self.assertEqual(+Frac(1, 3), Frac(1, 3))
