@@ -4,21 +4,21 @@ from points import Point
 from rectangles import Rectangle
 
 
-def test_rectangle_creation():
-    rect = Rectangle(0, 0, 4, 4)
-    assert rect.left == 0
+def test_create_rect():
+    rect = Rectangle(2, 0, 8, 4)
+    assert rect.left == 2
     assert rect.bottom == 0
-    assert rect.right == 4
+    assert rect.right == 8
     assert rect.top == 4
-    assert rect.width == 4
+    assert rect.width == 6
     assert rect.height == 4
 
-def test_from_points():
-    p1 = Point(1, 1)
+def test_create_from_points():
+    p1 = Point(1, 2)
     p2 = Point(3, 4)
     rect = Rectangle.from_points((p1, p2))
     assert rect.left == 1
-    assert rect.bottom == 1
+    assert rect.bottom == 2
     assert rect.right == 3
     assert rect.top == 4
 
@@ -31,7 +31,7 @@ def test_virtual_attributes():
     assert rect.center == Point(2.5, 3)
 
 def test_area():
-    rect = Rectangle(0, 0, 4, 4)
+    rect = Rectangle(0, 1, 4, 5)
     assert rect.area() == 16
 
 def test_intersection():
