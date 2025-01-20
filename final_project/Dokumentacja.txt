@@ -1,0 +1,51 @@
+GAME OF LIFE
+
+Gra w życie (ang. Game of Life) to jeden z pierwszych i najbardziej znanych automatów
+komórkowych. Została wymyślona w 1970 roku przez brytyjskiego matematyka Johna Conwaya.
+W grze udział człowieka sprawadza się tylko do ustalenia stanu początkowego komórek,
+które w kolejnych iteracjach zmieniają swój stan według dwóch prostych reguł:
+- martwa komórka, która ma dokładnie 3 żywych sąsiadów, staje się żywa w następnej
+ jednostce czasu (rodzi się),
+- żywa komórka z 2 albo 3 żywymi sąsiadami pozostaje nadal żywa; przy innej liczbie
+ sąsiadów umiera (z „samotności” albo „zatłoczenia”).
+
+Komórki mogą tworzyć struktury niezmienne (np. blok), zmieniające się okresowo oscylatory 
+(np. blinker) i niestałe (nie powracające nigdy do swojego pierwotnego stanu).
+
+
+Wersje
+Program napisałem wykorzystując Pythona w wersji 3.12.3 i bibliotekę pygame w wersji 2.6.0.
+pygame 2.6.0 (SDL 2.28.4, Python 3.12.3)
+
+Uruchomienie
+Będac w katologu projektu ("projekt_zaliczeniowy"), w wierszu poleceń:
+python Life.py		albo
+python -m Life
+
+Działanie
+Program nie obsługuje argumentów wiersza poleceń - wszystkie potrzebne opcje można ustawić
+w menu głównym, które otwiera się na początku działania programu.
+
+Można w nim wybrać dwie plansze z już zdefiniowanymi przykładowymi ułożeniami żywych komórek,
+które są zapisane w plikach. W tym celu należy kliknąć myszką na odpowiedni przycisk - plansza
+programu zostanie natychmiast zaktualizowana.
+
+Innym sposobem na ustawienie siatki komórek jest wybranie przycisku "DRAW YOUR GRID".
+Program przejdzie wtedy w tryb rysowania (przyciski zostają ukryte), a użytkownik ma
+możliwość ustawiania stanu komórek poprzez kliknięcia myszką.
+
+Aby powrócić do menu, należy wcisnąć klawisz ENTER. Uruchomienie gry następuje po kliknięciu
+przycisku "START GAME". Komórki zaczną automatycznie zmieniać swój stan, na podstawie
+zdefiniowanych reguł.
+Działanie programu można wstrzymać poprzez wciśnięcie spacji. Powtórne naciśnięcie
+spacji wznawia grę.
+
+W każdej chwili istnieje możliwość wyjścia z gry - w tym celu należy na klawiaturze kliknąć "q".
+
+
+Struktura programu
+Główna klasa programu posiada metody odpowiedzialne za wybór ustawień, przebieg pętli zdarzeń
+i aktualizowanie ekranu. Klasa Settings służy do przechowywania ustawień, a klasa Button
+definuje obiekt przyciku.
+
+
