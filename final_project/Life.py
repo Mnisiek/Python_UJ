@@ -10,7 +10,6 @@ from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN, K_RETURN, K_q, K_SPACE
 
 COLORS =  {"black": (0, 0, 0), "gray": (128, 128, 128), 
            "white": (255, 255, 255), "red": (255, 0, 0),
-           "green": (0, 255, 0), "blue": (0, 0, 255),
            "light gray": (80, 80, 80), "blue2": (63, 109, 140)}
 
 
@@ -34,6 +33,7 @@ class Life:
         self.drawing_mode = False
 
     def run(self):
+        """Działanie całego programu"""
         self.settings.game_active = True
         while self.settings.game_active:
             self._check_events()
@@ -42,7 +42,7 @@ class Life:
                 self._update_cells()
 
             self._update_screen()
-            self.clock.tick(7)
+            self.clock.tick(self.settings.FPS)
 
     def _check_events(self):
         """Obsługa pętli zdarzeń"""
@@ -112,11 +112,8 @@ class Life:
 
     def _update_cells(self):
         """Obliczanie nowego stanu komórek"""
-        # Martwa komórka, która ma dokładnie 3 żywych sąsiadów, staje się żywa
-        # w następnej jednostce czasu (rodzi się).
-        # Żywa komórka z 2 albo 3 żywymi sąsiadami pozostaje nadal żywa; przy
-        # innej liczbie sąsiadów umiera (z „samotności” albo „zatłoczenia”)
-        
+        # korzystamy ze zmiennej tymczasowej new_grid do zapisania
+        # nowego ułożenia żywych komórek
         new_grid = [[0 for _ in range(self.settings.cols)] for _ in range(self.settings.rows)]
         for row_index, line in enumerate(self.grid):
             for col_index, value in enumerate(line):
@@ -128,7 +125,8 @@ class Life:
 
         self.grid = new_grid
 
-    def _count_neighbors(self, x, y) -> int:
+    def _count_neighbors(self, x, y):
+        """Zliczanie sąsiadów"""
         neighbors = 0
         directions = ((-1, 1), (0, 1), (1, 1), (-1, 0), (1, 0), (-1, -1), (0, -1), (1, -1))
         for dx, dy in directions:
@@ -159,6 +157,7 @@ class Life:
                 pygame.draw.rect(self.screen, color, pygame.Rect(col * cell_size,
                                  row * cell_size, cell_size - 1, cell_size - 1))
 
+
 class Settings:
     """Klasa definiująca ustawienia programu"""
 
@@ -166,12 +165,14 @@ class Settings:
         self.clock = pygame.time.Clock()
         self.width = 800
         self.height = 600
+        self.FPS = 5
         self.game_active = False
         self.game_running = False
 
         self.cell_size = 10
         self.rows = self.width // self.cell_size
         self.cols = self.height // self.cell_size
+
 
 class Button:
     """Klasa tworząca przycisk"""
@@ -198,6 +199,7 @@ class Button:
         """Wyświetlenie przycisku z komunikatem"""
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
 
 
 if __name__ == '__main__':
