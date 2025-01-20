@@ -49,3 +49,5 @@ i aktualizowanie ekranu. Klasa Settings służy do przechowywania ustawień, a k
 definuje obiekt przyciku.
 
 
+Opis gry i wykorzystane reguły na podstawie:
+https://pl.wikipedia.org/wiki/Gra_w_%C5%BCycie
