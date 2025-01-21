@@ -5,6 +5,7 @@ zaznaczenie całkowicie dowolnego własnego ułożenia komórek."""
 
 
 import sys
+import random
 import pygame
 from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN, K_RETURN, K_q, K_SPACE
 
@@ -29,8 +30,8 @@ class Life:
         self.buttons = [Button(self, "LOAD GRID 1", 34, (50, 20)),
                         Button(self, "LOAD GRID 2", 34, (50, 80)),
                         Button(self, "DRAW YOUR GRID", 34, (50, 140)),
-                        Button(self, "START GAME", 34, (50, 200))]
-        self.drawing_mode = False
+                        Button(self, "RANDOM GRID", 34, (50, 200)),
+                        Button(self, "START GAME", 34, (50, 260))]
 
     def run(self):
         """Działanie całego programu"""
@@ -63,7 +64,7 @@ class Life:
                 return
 
         # jeśli w trybie rysowania, zmień stan komórki na przeciwny
-        if self.drawing_mode:
+        if self.settings.drawing_mode:
             cell_size = self.settings.cell_size
             col, row = pos[0] // cell_size, pos[1] // cell_size
             if 0 <= row < self.settings.rows and 0 <= col < self.settings.cols:
@@ -74,13 +75,15 @@ class Life:
         if key == K_q:
             pygame.quit()
             sys.exit(0)
-        elif key == K_RETURN and self.drawing_mode:
-            self.drawing_mode = False
-        elif key == K_RETURN and not self.drawing_mode:
+        elif key == K_RETURN and self.settings.drawing_mode:
+            self.settings.drawing_mode = False
+        elif key == K_RETURN and not self.settings.drawing_mode:
             self.settings.game_running = True
         elif key == K_SPACE and self.settings.game_running:
             self.settings.game_running = False
+            self.settings.drawing_mode = True
         elif key == K_SPACE and not self.settings.game_running:
+            self.settings.drawing_mode = False
             self.settings.game_running = True
 
     def _handle_button_click(self, button_text):
@@ -90,11 +93,13 @@ class Life:
         elif button_text == "LOAD GRID 2":
             self._load_pattern("grid2.txt")
         elif button_text == "DRAW YOUR GRID":
-            self.drawing_mode = True
+            self.settings.drawing_mode = True
             self.grid = [[0 for _ in range(self.settings.cols)]
                          for _ in range(self.settings.rows)]
+        elif button_text == "RANDOM GRID":
+            self._generatate_random_grid(self.settings.density)
         elif button_text == "START GAME":
-            self.drawing_mode = False
+            self.settings.drawing_mode = False
             self.settings.game_running = True
 
     def _load_pattern(self, filename):
@@ -109,6 +114,16 @@ class Life:
                             self.grid[row_index][col_index] = int(value)
         except FileNotFoundError:
             print(f"Nie znaleziono pliku: {filename}")
+
+    def _generatate_random_grid(self, density):
+        """Tworzenie losowej siatki komórek"""
+        for row in range(self.settings.rows):
+            for col in range(self.settings.cols):
+                if random.random() < density:
+                    self.grid[row][col] = 1
+                else:
+                    self.grid[row][col] = 0
+        
 
     def _update_cells(self):
         """Obliczanie nowego stanu komórek"""
@@ -140,7 +155,7 @@ class Life:
         """Aktualizowanie zawartości wyświetlanej na ekranie"""
         self.screen.fill(COLORS["black"])
         self._draw_grid()
-        if not self.drawing_mode and not self.settings.game_running:
+        if not self.settings.drawing_mode and not self.settings.game_running:
             for button in self.buttons:
                 button.draw_button()
         pygame.display.flip()
@@ -166,12 +181,14 @@ class Settings:
         self.width = 800
         self.height = 600
         self.FPS = 5
+        self.drawing_mode = False
         self.game_active = False
         self.game_running = False
 
         self.cell_size = 10
         self.rows = self.width // self.cell_size
         self.cols = self.height // self.cell_size
+        self.density = 0.2
 
 
 class Button:
