@@ -1,5 +1,7 @@
 GAME OF LIFE
 
+Michał Śliż
+
 Gra w życie (ang. Game of Life) to jeden z pierwszych i najbardziej znanych automatów
 komórkowych. Została wymyślona w 1970 roku przez brytyjskiego matematyka Johna Conwaya.
 W grze udział człowieka sprawadza się tylko do ustalenia stanu początkowego komórek,
