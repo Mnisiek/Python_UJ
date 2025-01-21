@@ -3,15 +3,14 @@ wymyślonych przez Johna Conwaya. Użytkownik ma możliwość wyboru początkowe
 stanu komórek poprzez skorzystanie z kilku przykładowych układów albo
 zaznaczenie całkowicie dowolnego własnego ułożenia komórek."""
 
-
 import sys
 import random
 import pygame
 from pygame.locals import MOUSEBUTTONDOWN, KEYDOWN, K_RETURN, K_q, K_SPACE
 
-COLORS =  {"black": (0, 0, 0), "gray": (128, 128, 128), 
-           "white": (255, 255, 255), "red": (255, 0, 0),
-           "light gray": (80, 80, 80), "blue2": (63, 109, 140)}
+COLORS = {"black": (0, 0, 0), "gray": (128, 128, 128),
+          "white": (255, 255, 255), "red": (255, 0, 0),
+          "light gray": (80, 80, 80), "blue2": (63, 109, 140)}
 
 
 class Life:
@@ -35,8 +34,7 @@ class Life:
 
     def run(self):
         """Działanie całego programu"""
-        self.settings.game_active = True
-        while self.settings.game_active:
+        while True:
             self._check_events()
 
             if self.settings.game_running:
@@ -88,19 +86,22 @@ class Life:
 
     def _handle_button_click(self, button_text):
         """Obsługa kliknięcia przycisku"""
-        if button_text == "LOAD GRID 1":
-            self._load_pattern("grid1.txt")
-        elif button_text == "LOAD GRID 2":
-            self._load_pattern("grid2.txt")
-        elif button_text == "DRAW YOUR GRID":
-            self.settings.drawing_mode = True
-            self.grid = [[0 for _ in range(self.settings.cols)]
-                         for _ in range(self.settings.rows)]
-        elif button_text == "RANDOM GRID":
-            self._generatate_random_grid(self.settings.density)
-        elif button_text == "START GAME":
-            self.settings.drawing_mode = False
-            self.settings.game_running = True
+        if not self.settings.game_running and not self.settings.drawing_mode:
+            if button_text == "LOAD GRID 1":
+                self._load_pattern("grid1.txt")
+            elif button_text == "LOAD GRID 2":
+                self._load_pattern("grid2.txt")
+            elif button_text == "DRAW YOUR GRID":
+                self.settings.drawing_mode = True
+                self.grid = [[0 for _ in range(self.settings.cols)]
+                             for _ in range(self.settings.rows)]
+            elif button_text == "RANDOM GRID":
+                self._generate_random_grid(self.settings.density)
+                self.drawing_mode = False
+                self.settings.game_running = False
+            elif button_text == "START GAME":
+                self.settings.drawing_mode = False
+                self.settings.game_running = True
 
     def _load_pattern(self, filename):
         """Wczytanie wzoru z pliku"""
@@ -110,12 +111,12 @@ class Life:
                     line = line.split()
                     for col_index, value in enumerate(line):
                         if row_index < self.settings.rows and \
-                            col_index < self.settings.cols:
+                                col_index < self.settings.cols:
                             self.grid[row_index][col_index] = int(value)
         except FileNotFoundError:
             print(f"Nie znaleziono pliku: {filename}")
 
-    def _generatate_random_grid(self, density):
+    def _generate_random_grid(self, density):
         """Tworzenie losowej siatki komórek"""
         for row in range(self.settings.rows):
             for col in range(self.settings.cols):
@@ -123,7 +124,6 @@ class Life:
                     self.grid[row][col] = 1
                 else:
                     self.grid[row][col] = 0
-        
 
     def _update_cells(self):
         """Obliczanie nowego stanu komórek"""
@@ -153,7 +153,7 @@ class Life:
 
     def _update_screen(self):
         """Aktualizowanie zawartości wyświetlanej na ekranie"""
-        self.screen.fill(COLORS["black"])
+        self.screen.fill(COLORS.get("black"))
         self._draw_grid()
         if not self.settings.drawing_mode and not self.settings.game_running:
             for button in self.buttons:
@@ -170,7 +170,7 @@ class Life:
                 else:
                     color = COLORS.get("black")
                 pygame.draw.rect(self.screen, color, pygame.Rect(col * cell_size,
-                                 row * cell_size, cell_size - 1, cell_size - 1))
+                    row * cell_size, cell_size - 1, cell_size - 1))
 
 
 class Settings:
@@ -182,13 +182,12 @@ class Settings:
         self.height = 600
         self.FPS = 5
         self.drawing_mode = False
-        self.game_active = False
         self.game_running = False
 
         self.cell_size = 10
-        self.rows = self.width // self.cell_size
-        self.cols = self.height // self.cell_size
-        self.density = 0.2
+        self.rows = self.height // self.cell_size
+        self.cols = self.width // self.cell_size
+        self.density = 0.25
 
 
 class Button:
@@ -216,7 +215,6 @@ class Button:
         """Wyświetlenie przycisku z komunikatem"""
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
-
 
 
 if __name__ == '__main__':
