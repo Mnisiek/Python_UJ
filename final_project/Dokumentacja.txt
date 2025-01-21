@@ -35,6 +35,7 @@ programu zostanie natychmiast zaktualizowana.
 Innym sposobem na ustawienie siatki komórek jest wybranie przycisku "DRAW YOUR GRID".
 Program przejdzie wtedy w tryb rysowania (przyciski zostają ukryte), a użytkownik ma
 możliwość ustawiania stanu komórek poprzez kliknięcia myszką.
+Przycisk "RANDOM GRID" generuje losowy układ komórek na planszy.
 
 Aby powrócić do menu, należy wcisnąć klawisz ENTER. Uruchomienie gry następuje po kliknięciu
 przycisku "START GAME". Komórki zaczną automatycznie zmieniać swój stan, na podstawie
