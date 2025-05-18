@@ -1,2 +1,3 @@
 # Python_UJ
-Zadania z kursu Język Python (2024/2025)
+
+Assignments from my Python college course
